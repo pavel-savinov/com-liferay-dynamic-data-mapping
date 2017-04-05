@@ -1526,6 +1526,8 @@ AUI.add(
 
 						var portletURL = Liferay.PortletURL.createURL(themeDisplay.getLayoutRelativeURL());
 
+						var layoutJSONNode = instance.getInputNode();
+
 						portletURL.setParameter('criteria', 'com.liferay.layout.item.selector.criterion.LayoutItemSelectorCriterion');
 						portletURL.setParameter('itemSelectedEventName', portletNamespace + 'selectLinkToPage');
 						portletURL.setParameter('p_p_auth', container.getData('itemSelectorAuthToken'));
@@ -1536,6 +1538,14 @@ AUI.add(
 
 						portletURL.setParameter('0_json', JSON.stringify(criterionJSON));
 						portletURL.setParameter('1_json', JSON.stringify(criterionJSON));
+
+						if (Lang.isString(layoutJSONNode.val()) && layoutJSONNode.val() !== '') {
+							var selectedLayoutJSONObject = JSON.parse(layoutJSONNode.val());
+
+							if (selectedLayoutJSONObject) {
+								portletURL.setParameter('layoutUuid', selectedLayoutJSONObject.id);
+							}
+						}
 
 						portletURL.setPortletId(Liferay.PortletKeys.ITEM_SELECTOR);
 						portletURL.setPortletMode('view');
@@ -1548,7 +1558,6 @@ AUI.add(
 						var instance = this;
 
 						var container = instance.get('container');
-						var selectButton = container.one('.select-button');
 
 						var itemSelectorURL = instance._getLinkToPageItemSelectorURL();
 
